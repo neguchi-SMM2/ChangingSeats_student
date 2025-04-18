@@ -89,7 +89,7 @@
         studentId: formData.get("studentId")
       };
 
-      const res = await fetch("https://YOUR_SERVER_URL/register", {
+      const res = await fetch("https://changingseats-server.onrender.com/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -105,7 +105,7 @@
 
     // 現在の座席情報を表示
     async function loadSeats() {
-      const res = await fetch("https://YOUR_SERVER_URL/seats");
+      const res = await fetch("https://changingseats-server.onrender.com/seats");
       const data = await res.json();
       const grid = document.getElementById("seat-grid");
       grid.innerHTML = "";
