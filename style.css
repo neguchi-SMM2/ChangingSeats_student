@@ -1,0 +1,10 @@
+body {
+    font-family: sans-serif;
+    text-align: center;
+    padding: 1em;
+  }
+  #video {
+    width: 100%;
+    max-width: 400px;
+  }
+  
