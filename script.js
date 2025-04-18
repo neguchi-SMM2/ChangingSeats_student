@@ -35,7 +35,7 @@ document.getElementById("seatForm").addEventListener("submit", async (e) => {
   const name = document.getElementById("name").value;
   const number = document.getElementById("number").value;
 
-  const response = await fetch("https://your-server-url.onrender.com/api/seat", {
+  const response = await fetch("https://changingseats-server.onrender.com/api/seats", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
