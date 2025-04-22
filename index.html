@@ -72,7 +72,6 @@
   <div id="formOverlay">
     <div id="seatDisplay">座席番号: --</div>
     <input type="text" id="nameInput" placeholder="名前を入力" />
-    <button onclick="retryScan()" class="secondary">再読み取り</button>
     <button onclick="submitSeat()">送信</button>
   </div>
 
@@ -87,7 +86,7 @@
     function onScanSuccess(decodedText) {
       if (decodedText.startsWith("seat:")) {
         selectedSeat = parseInt(decodedText.split(":")[1]);
-        seatDisplay.textContent = `座席番号: ${selectedSeat + 1}`;
+        seatDisplay.textContent = `座席番号: ${selectedSeat}`;
         document.getElementById("reader").style.display = "none";
         form.style.display = "flex";
         html5QrcodeScanner.clear();
