@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>座席登録</title>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
@@ -71,6 +72,7 @@
 
   <div id="formOverlay">
     <div id="seatDisplay">座席番号: --</div>
+    <p>名前はフルネームで入力。<br>苗字と名前の間に空白を入れないでください。</p>
     <input type="text" id="nameInput" placeholder="名前を入力" />
     <button onclick="submitSeat()">送信</button>
   </div>
