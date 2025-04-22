@@ -1,171 +1,127 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>席選択 - 生徒用</title>
+  <meta charset="UTF-8">
+  <title>座席登録</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #fff);
+      font-family: sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
     }
 
-    h1 {
-      text-align: center;
-      color: #00796b;
-    }
-
-    #seat-grid {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(50px, 1fr));
-      gap: 10px;
-      margin: 20px auto;
-      max-width: 600px;
-    }
-
-    .seat {
-      background-color: #ffffff;
-      border: 2px solid #4db6ac;
-      border-radius: 8px;
-      padding: 8px;
-      text-align: center;
-      font-size: 14px;
-      box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-    }
-
-    .seat.empty {
-      background-color: #f0f0f0;
-    }
-
-    #camera, #form {
-      margin: 20px auto;
+    #reader {
+      width: 90%;
       max-width: 400px;
-      background-color: #ffffffcc;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 150, 136, 0.2);
+      margin-bottom: 20px;
     }
 
-    input, button {
+    #formOverlay {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      width: 90%;
+      max-width: 350px;
+    }
+
+    input {
       width: 100%;
       padding: 10px;
-      margin: 8px 0;
       font-size: 16px;
-      border: 1px solid #b2dfdb;
-      border-radius: 6px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
     button {
-      background-color: #4db6ac;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      background: #4CAF50;
       color: white;
+      border: none;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #00897b;
+    button.secondary {
+      background: #f44336;
+    }
+
+    @media (max-width: 600px) {
+      #formOverlay {
+        width: 95%;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>QRコードで席を指定</h1>
+  <h1>座席登録</h1>
+  <div id="reader"></div>
 
-  <div id="camera">
-    <video id="preview" style="width: 100%; border-radius: 10px;"></video>
+  <div id="formOverlay">
+    <div id="seatDisplay">座席番号: --</div>
+    <input type="text" id="nameInput" placeholder="名前を入力" />
+    <button onclick="retryScan()" class="secondary">再読み取り</button>
+    <button onclick="submitSeat()">送信</button>
   </div>
 
-  <div id="form">
-    <form id="submitForm">
-      <label for="name">名前：</label>
-      <input type="text" id="name" required />
-
-      <label for="number">出席番号：</label>
-      <input type="number" id="number" required />
-
-      <input type="hidden" id="seat" />
-
-      <button type="submit">送信</button>
-    </form>
-  </div>
-
-  <div id="seat-grid"></div>
-
-  <script src="https://unpkg.com/html5-qrcode@2.3.6/minified/html5-qrcode.min.js"></script>
   <script>
-    const video = document.getElementById('preview');
-    const seatInput = document.getElementById('seat');
-    const seatGrid = document.getElementById('seat-grid');
+    let selectedSeat = null;
+    const form = document.getElementById("formOverlay");
+    const seatDisplay = document.getElementById("seatDisplay");
+    const nameInput = document.getElementById("nameInput");
 
-    const generateSeats = () => {
-      seatGrid.innerHTML = '';
-      for (let i = 0; i < 40; i++) {
-        const div = document.createElement('div');
-        div.className = 'seat empty';
-        div.id = 'seat-' + i;
-        div.innerText = `[${i}]`;
-        seatGrid.appendChild(div);
+    const socket = new WebSocket(`wss://changingseats-server.onrender.com`);
+
+    function onScanSuccess(decodedText) {
+      if (decodedText.startsWith("seat:")) {
+        selectedSeat = parseInt(decodedText.split(":")[1]);
+        seatDisplay.textContent = `座席番号: ${selectedSeat + 1}`;
+        document.getElementById("reader").style.display = "none";
+        form.style.display = "flex";
+        html5QrcodeScanner.clear();
       }
-    };
+    }
 
-    generateSeats();
+    function retryScan() {
+      form.style.display = "none";
+      document.getElementById("reader").style.display = "block";
+      startQRScanner();
+    }
 
-    const startScan = async () => {
-      const html5QrCode = new Html5Qrcode("preview");
-      const config = { fps: 10, qrbox: 250 };
+    function submitSeat() {
+      const name = nameInput.value.trim();
+      if (name && selectedSeat !== null) {
+        socket.send(JSON.stringify({ seat: selectedSeat, name }));
+        alert("送信されました");
+        form.style.display = "none";
+      }
+    }
 
-      html5QrCode.start(
+    function startQRScanner() {
+      html5QrcodeScanner = new Html5Qrcode("reader");
+      html5QrcodeScanner.start(
         { facingMode: "environment" },
-        config,
-        qrCodeMessage => {
-          if (!isNaN(qrCodeMessage)) {
-            seatInput.value = qrCodeMessage;
-            alert(`席番号 ${qrCodeMessage} を読み取りました！`);
-            html5QrCode.stop();
-          }
-        },
-        errorMessage => {
-          // console.log(errorMessage);
-        }
-      ).catch(err => console.error(err));
-    };
-
-    startScan();
-
-    document.getElementById("submitForm").addEventListener("submit", async e => {
-      e.preventDefault();
-
-      const name = document.getElementById("name").value;
-      const number = document.getElementById("number").value;
-      const seat = document.getElementById("seat").value;
-
-      if (!seat) return alert("QRコードを読み取ってください。");
-
-      const res = await fetch("https://your-render-url.onrender.com/setSeat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ seat, name, number })
+        { fps: 10, qrbox: 250 },
+        onScanSuccess
+      ).catch(err => {
+        alert("カメラを起動できませんでした：" + err);
       });
+    }
 
-      const result = await res.json();
-      alert(result.message || "送信完了");
-    });
-
-    const loadSeats = async () => {
-      const res = await fetch("https://your-render-url.onrender.com/data");
-      const data = await res.json();
-
-      data.forEach(d => {
-        const div = document.getElementById('seat-' + d.seat);
-        if (div) {
-          div.classList.remove('empty');
-          div.innerText = `${d.name}\n(${d.number})`;
-        }
-      });
-    };
-
-    loadSeats();
-    setInterval(loadSeats, 5000);
+    let html5QrcodeScanner;
+    startQRScanner();
   </script>
 </body>
 </html>
