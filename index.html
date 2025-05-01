@@ -19,19 +19,41 @@
       background: white;
       padding: 20px;
       border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
       display: none;
       flex-direction: column;
+      gap: 15px;
+      align-items: center;
       width: 90%;
       max-width: 300px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-    input, select, button {
+    input {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
       font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
-    button.secondary { background: #f44336; color: white; }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #f44336;
+    }
+
+    @media (max-width: 600px) {
+      #formOverlay {
+        width: 95%;
+      }
+    }
   </style>
 </head>
 <body>
