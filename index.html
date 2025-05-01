@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>座席登録</title>
+  <title>最新鋭の席替えシステム</title>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
     body { font-family: sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
@@ -19,6 +19,7 @@
   <div id="reader" style="width: 300px; max-width: 90%;"></div>
 
   <div id="formOverlay">
+    <div id="seatDisplay">座席番号: --</div>
     <div id="classSelector">
       <label>学年:
         <select id="gradeSelect">
@@ -48,7 +49,6 @@
     let selectedSeat = null;
     const form = document.getElementById("formOverlay");
     const seatDisplay = document.getElementById("seatDisplay");
-    const classDisplay = document.getElementById("classDisplay");
     const nameInput = document.getElementById("nameInput");
     const gradeSelect = document.getElementById("gradeSelect");
 
@@ -58,15 +58,10 @@
       return `${gradeSelect.value}-${classSelect.value}`;
     }
 
-    function getClassLabel() {
-      return `${gradeSelect.value}年${classSelect.value}組`;
-    }
-
     function onScanSuccess(decodedText) {
       if (decodedText.startsWith("seat:")) {
         selectedSeat = parseInt(decodedText.split(":")[1]) - 1;
         seatDisplay.textContent = `座席番号: ${selectedSeat + 1}`;
-        classDisplay.textContent = `クラス: ${getClassLabel()}`;
         document.getElementById("reader").style.display = "none";
         form.style.display = "flex";
         html5Qrcode.stop().catch(e => console.error(e));
