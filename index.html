@@ -83,6 +83,7 @@
           <option value="1">1年</option>
           <option value="2">2年</option>
           <option value="3">3年</option>
+          <option value="4">4年</option>
         </select>
       </label>
       <label>組:
@@ -90,9 +91,7 @@
       </label>
     </div>
 
-    <p>名前は<u>漢字フルネーム</u>で入力。<br>
-      <u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u>
-    </p>
+    <p>名前は<u>漢字フルネーム</u>で入力。<br><u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u><br>改行文字を入れないでください。<br>送信が完了したらページを閉じてください。</p>
     <input type="text" id="nameInput" placeholder="名前を入力" />
     <button onclick="submitSeat()">送信</button>
   </div>
@@ -121,12 +120,10 @@
     function onScanSuccess(decodedText) {
       if (decodedText.startsWith("seat:")) {
         selectedSeat = parseInt(decodedText.split(":")[1]) - 1;
-        seatDisplay.textContent = `座席番号: ${selectedSeat + 1}`;
+        seatDisplay.textContent = `座席番号: ??`;
 
         document.getElementById("reader").style.display = "none";
         form.style.display = "flex";
-
-        // QRコードスキャナを停止
         html5QrcodeScanner.clear();
       }
     }
