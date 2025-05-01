@@ -105,12 +105,19 @@
       form.style.display = "none";
     }
 
-    // カメラ初期化（scanner版）
-    let html5QrcodeScanner = new Html5QrcodeScanner("reader", {
-      fps: 10,
-      qrbox: 250
-    });
-    html5QrcodeScanner.render(onScanSuccess);
+    function startQRScanner() {
+      html5QrcodeScanner = new Html5Qrcode("reader");
+      html5QrcodeScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        onScanSuccess
+      ).catch(err => {
+        alert("カメラを起動できませんでした：" + err);
+      });
+    }
+
+    let html5QrcodeScanner;
+    startQRScanner();
   </script>
 </body>
 </html>
