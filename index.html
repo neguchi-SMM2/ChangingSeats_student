@@ -6,10 +6,31 @@
   <title>最新鋭の席替えシステム</title>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
-    body { font-family: sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    #reader, #formOverlay, #classSelector { margin-top: 20px; }
-    #formOverlay { background: white; padding: 20px; border-radius: 10px; display: none; flex-direction: column; width: 90%; max-width: 300px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-    input, select, button { width: 100%; padding: 10px; margin-top: 10px; font-size: 16px; }
+    body {
+      font-family: sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    #reader, #formOverlay { margin-top: 20px; }
+    #formOverlay {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+      flex-direction: column;
+      width: 90%;
+      max-width: 300px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
     button.secondary { background: #f44336; color: white; }
   </style>
 </head>
@@ -20,6 +41,7 @@
 
   <div id="formOverlay">
     <div id="seatDisplay">座席番号: --</div>
+
     <div id="classSelector">
       <label>学年:
         <select id="gradeSelect">
@@ -32,12 +54,16 @@
         <select id="classSelect"></select>
       </label>
     </div>
-    <p>名前は<u>漢字フルネーム</u>で入力。<br><u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u></p>
+
+    <p>名前は<u>漢字フルネーム</u>で入力。<br>
+      <u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u>
+    </p>
     <input type="text" id="nameInput" placeholder="名前を入力" />
     <button onclick="submitSeat()">送信</button>
   </div>
 
   <script>
+    // 組の選択肢を生成
     const classSelect = document.getElementById("classSelect");
     for (let i = 1; i <= 9; i++) {
       const opt = document.createElement("option");
@@ -51,7 +77,6 @@
     const seatDisplay = document.getElementById("seatDisplay");
     const nameInput = document.getElementById("nameInput");
     const gradeSelect = document.getElementById("gradeSelect");
-
     const socket = new WebSocket(`wss://changingseats-server.onrender.com`);
 
     function getClassName() {
@@ -62,9 +87,12 @@
       if (decodedText.startsWith("seat:")) {
         selectedSeat = parseInt(decodedText.split(":")[1]) - 1;
         seatDisplay.textContent = `座席番号: ${selectedSeat + 1}`;
+
         document.getElementById("reader").style.display = "none";
         form.style.display = "flex";
-        html5Qrcode.stop().catch(e => console.error(e));
+
+        // QRコードスキャナを停止
+        html5QrcodeScanner.clear();
       }
     }
 
@@ -77,12 +105,12 @@
       form.style.display = "none";
     }
 
-    const html5Qrcode = new Html5Qrcode("reader");
-    html5Qrcode.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: 250 },
-      onScanSuccess
-    ).catch(err => alert("カメラ起動に失敗：" + err));
+    // カメラ初期化（scanner版）
+    let html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+      fps: 10,
+      qrbox: 250
+    });
+    html5QrcodeScanner.render(onScanSuccess);
   </script>
 </body>
 </html>
