@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>最新鋭の席替えシステム</title>
+  <title>座席登録</title>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <style>
     body { font-family: sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
@@ -25,13 +25,11 @@
       </select>
     </label>
     <label>組:
-      <select id="classSelect">
-        ${[...Array(9)].map((_, i) => `<option value="${i+1}">${i+1}組</option>`).join('')}
-      </select>
+      <select id="classSelect"></select>
     </label>
   </div>
 
-  <div id="reader"></div>
+  <div id="reader" style="width: 300px; max-width: 90%;"></div>
 
   <div id="formOverlay">
     <div id="seatDisplay">座席番号: --</div>
@@ -41,12 +39,19 @@
   </div>
 
   <script>
+    const classSelect = document.getElementById("classSelect");
+    for (let i = 1; i <= 9; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = `${i}組`;
+      classSelect.appendChild(opt);
+    }
+
     let selectedSeat = null;
     const form = document.getElementById("formOverlay");
     const seatDisplay = document.getElementById("seatDisplay");
     const nameInput = document.getElementById("nameInput");
     const gradeSelect = document.getElementById("gradeSelect");
-    const classSelect = document.getElementById("classSelect");
 
     const socket = new WebSocket(`wss://changingseats-server.onrender.com`);
 
@@ -60,7 +65,7 @@
         seatDisplay.textContent = `座席番号: ${selectedSeat + 1}`;
         document.getElementById("reader").style.display = "none";
         form.style.display = "flex";
-        html5QrcodeScanner.clear();
+        html5Qrcode.stop().catch(e => console.error(e));
       }
     }
 
@@ -73,17 +78,12 @@
       form.style.display = "none";
     }
 
-    function startQRScanner() {
-      html5QrcodeScanner = new Html5Qrcode("reader");
-      html5QrcodeScanner.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        onScanSuccess
-      ).catch(err => alert("カメラエラー：" + err));
-    }
-
-    let html5QrcodeScanner;
-    startQRScanner();
+    const html5Qrcode = new Html5Qrcode("reader");
+    html5Qrcode.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      onScanSuccess
+    ).catch(err => alert("カメラ起動に失敗：" + err));
   </script>
 </body>
 </html>
