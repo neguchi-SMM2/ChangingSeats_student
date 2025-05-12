@@ -130,9 +130,9 @@
 
     function submitSeat() {
       const name = nameInput.value.trim();
-      if (!name || selectedSeat === null) return;
+      if (!name === null) return;
       const className = getClassName();
-      socket.send(JSON.stringify({ seat: selectedSeat, name, className }));
+      socket.send(JSON.stringify({ seat: 1, name, className }));
       alert("送信されました");
       form.style.display = "none";
     }
