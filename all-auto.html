@@ -110,6 +110,8 @@
     const nameInput = document.getElementById("nameInput");
     const gradeSelect = document.getElementById("gradeSelect");
     const socket = new WebSocket(`wss://changingseats-server.onrender.com`);
+    
+    form.style.display = "flex";
 
     function getClassName() {
       return `${gradeSelect.value}-${classSelect.value}`;
