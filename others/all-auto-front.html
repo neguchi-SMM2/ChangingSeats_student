@@ -132,7 +132,7 @@
       const name = nameInput.value.trim();
       if (!name === null) return;
       const className = getClassName();
-      socket.send(JSON.stringify({ seat: 1, name, className }));
+      socket.send(JSON.stringify({ type: "random_front", name, className }));
       alert("送信されました");
       form.style.display = "none";
     }
