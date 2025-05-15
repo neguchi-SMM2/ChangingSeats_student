@@ -121,7 +121,7 @@
     function onScanSuccess(decodedText) {
       if (decodedText.startsWith("seat:")) {
         selectedSeat = parseInt(decodedText.split(":")[1]) - 1;
-        seatDisplay.textContent = `座席番号: ${selectedSeat}`;
+        seatDisplay.textContent = `座席番号: ${selectedSeat + 1}`;
 
         document.getElementById("reader").style.display = "none";
         form.style.display = "flex";
