@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>最新鋭の席替えシステム</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #reader, #formOverlay { margin-top: 20px; }
+
+    #formOverlay {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      width: 90%;
+      max-width: 300px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #f44336;
+    }
+
+    @media (max-width: 600px) {
+      #formOverlay {
+        width: 95%;
+      }
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      color: #333;
+      font-size: 16px;
+    }
+
+  </style>
+</head>
+<body>
+  <h2>座席登録</h2>
+  <small><b>- test -</b></small>
+
+  <div id="formOverlay">
+    <div id="seatDisplay">座席番号: --</div>
+
+    <div id="classSelector">
+      <label>学年:
+        <select id="gradeSelect">
+          <option value="1">1年</option>
+          <option value="2">2年</option>
+          <option value="3">3年</option>
+          <option value="4">4年</option>
+          <option value="5">5年</option>
+          <option value="6">6年</option>
+          <option value="7">7年</option>
+        </select>
+      </label>
+      <label>組:
+        <select id="classSelect"></select>
+      </label>
+    </div>
+
+    <p>名前は<u>漢字フルネーム</u>で入力。<br><u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u><br>改行文字を入れないでください。<br>送信が完了したらページを閉じてください。</p>
+    <input type="text" id="nameInput" placeholder="名前を入力" />
+    <button onclick="submitSeat()">送信</button>
+  </div>
+
+  <script>
+    // 組の選択肢を生成
+    const classSelect = document.getElementById("classSelect");
+    for (let i = 1; i <= 20; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = `${i}組`;
+      classSelect.appendChild(opt);
+    }
+
+    let selectedSeat = null;
+    const form = document.getElementById("formOverlay");
+    const seatDisplay = document.getElementById("seatDisplay");
+    const nameInput = document.getElementById("nameInput");
+    const gradeSelect = document.getElementById("gradeSelect");
+    const socket = new WebSocket(`wss://changingseats-server.onrender.com`);
+    
+    form.style.display = "flex";
+
+    function getClassName() {
+      return `${gradeSelect.value}-${classSelect.value}`;
+    }
+
+    function onScanSuccess(decodedText) {
+      if (decodedText.startsWith("seat:")) {
+        selectedSeat = parseInt(decodedText.split(":")[1]) - 1;
+        seatDisplay.textContent = `座席番号: ??`;
+
+        document.getElementById("reader").style.display = "none";
+        form.style.display = "flex";
+        html5QrcodeScanner.clear();
+      }
+    }
+
+    function submitSeat() {
+      const name = nameInput.value.trim();
+      if (!name === null) return;
+      const className = getClassName();
+      socket.send(JSON.stringify({ type: "random", name, className }));
+      alert(`送信されました ${name}, ${className}`);
+      form.style.display = "none";
+    }
+  </script>
+</body>
+</html>
