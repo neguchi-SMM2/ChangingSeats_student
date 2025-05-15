@@ -71,7 +71,7 @@
 </head>
 <body>
   <h2>座席登録</h2>
-  <small><b>- QRコード読み取り -</b></small>
+  <small><b>- QRコード読み取り / 座席番号表示 -</b></small>
 
   <div id="reader" style="width: 300px; max-width: 90%;"></div>
 
@@ -121,7 +121,7 @@
     function onScanSuccess(decodedText) {
       if (decodedText.startsWith("seat:")) {
         selectedSeat = parseInt(decodedText.split(":")[1]) - 1;
-        seatDisplay.textContent = `座席番号: ??`;
+        seatDisplay.textContent = `座席番号: ${selectedSeat}`;
 
         document.getElementById("reader").style.display = "none";
         form.style.display = "flex";
