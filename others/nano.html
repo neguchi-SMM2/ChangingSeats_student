@@ -142,7 +142,7 @@
 
     function submitSeat() {
       const name = nameInput.value.trim();
-      if (!name === null) return;
+      if (!name === null || selectnum1.value === selectnum2.value || selectnum2.value === selectnum3.value || selectnum1.value === selectnum3.value) return;
       socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"number3":selectnum3.value,"grade":gradeSelect.value,"class":classSelect.value} }));
       alert("送信されました");
       form.style.display = "none";
