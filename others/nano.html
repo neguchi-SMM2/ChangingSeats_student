@@ -109,15 +109,27 @@
       opt.textContent = `${i}組`;
       classSelect.appendChild(opt);
     }
-    const selectnum1 = document.getElementById("classSelect");
+    const selectnum1 = document.getElementById("selectnum1");
     for (let i = 1; i <= 43; i++) {
       const opt = document.createElement("option");
       opt.value = i;
       opt.textContent = `${i}番`;
       classSelect.appendChild(opt);
     }
-    const selectnum2 = selectnum1;
-    const selectnum3 = selectnum1;
+    const selectnum2 = document.getElementById("selectnum2");
+    for (let i = 1; i <= 43; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = `${i}番`;
+      classSelect.appendChild(opt);
+    }
+    const selectnum3 = document.getElementById("selectnum3");
+    for (let i = 1; i <= 43; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = `${i}番`;
+      classSelect.appendChild(opt);
+    }
 
     let selectedSeat = null;
     const form = document.getElementById("formOverlay");
