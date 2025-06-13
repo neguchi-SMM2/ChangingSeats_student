@@ -83,6 +83,7 @@
     <div id="classSelector">
       <label>学年:
         <select id="gradeSelect">
+          <option value="0">学年を選択</option>
           <option value="1">1年</option>
           <option value="2">2年</option>
           <option value="3">3年</option>
@@ -108,12 +109,15 @@
   </div>
 
   <script>
-    // 組の選択肢を生成
     const classSelect = document.getElementById("classSelect");
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 0; i <= 9; i++) {
       const opt = document.createElement("option");
       opt.value = i;
-      opt.textContent = `${i}組`;
+      if (i === 0) {
+        opt.textContent = `組を選択`;
+      } else {
+        opt.textContent = `${i}組`;
+      }
       classSelect.appendChild(opt);
     }
     const selectnum1 = document.getElementById("selectnum1");
@@ -147,12 +151,37 @@
     
     form.style.display = "flex";
 
+    function addText(i,j) {
+      let text = i;
+      if (i === "") {
+        text += j;
+      } else {
+        text += `<br>${j}`
+      }
+    return text;
+    }
+
+
     function submitSeat() {
       const name = nameInput.value.trim();
-      if (!name === null || selectnum1.value === selectnum2.value || selectnum2.value === selectnum3.value || selectnum1.value === selectnum3.value) return;
-      socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"number3":selectnum3.value,"grade":gradeSelect.value,"class":classSelect.value} }));
-      alert("送信されました");
-      form.style.display = "none";
+      if (!name === null || selectnum1.value === selectnum2.value || selectnum2.value === selectnum3.value || selectnum1.value === selectnum3.value || gradeSelect.value === 0 || classSelect.value === 0) {
+        let alertText = "";
+        if (!name === null) {
+          alertText = addText(alertText, "名前を入力してください。");
+        }
+        if (selectnum1.value === selectnum2.value || selectnum2.value === selectnum3.value || selectnum1.value === selectnum3.value) {
+          alertText = addText(alertText, "座席番号はすべて違う席を選択してください。");
+        }
+        if (gradeSelect.value === 0 || classSelect.value === 0) {
+          alertText = addText(alertText, "学年、組を選択してください。");
+        }
+        alertText = addText(alertText, "上記の点を修正してください。")
+        alert(alertText);
+      } else {
+        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"number3":selectnum3.value,"grade":gradeSelect.value,"class":classSelect.value} }));
+        alert("送信されました");
+        form.style.display = "none";
+      }
     }
   </script>
 </body>
