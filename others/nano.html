@@ -83,7 +83,7 @@
     <div id="classSelector">
       <label>学年:
         <select id="gradeSelect">
-          <option value="0">学年を選択</option>
+          <option value="0"></option>
           <option value="1">1年</option>
           <option value="2">2年</option>
           <option value="3">3年</option>
@@ -114,7 +114,7 @@
       const opt = document.createElement("option");
       opt.value = i;
       if (i === 0) {
-        opt.textContent = `組を選択`;
+        opt.textContent = ``;
       } else {
         opt.textContent = `${i}組`;
       }
