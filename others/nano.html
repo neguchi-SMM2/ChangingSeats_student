@@ -175,7 +175,7 @@
         if (gradeSelect.value === 0 || classSelect.value === 0) {
           alertText = addText(alertText, "学年、組を選択してください。");
         }
-        alertText = addText(alertText, "上記の点を修正してください。")
+        alertText = addText(alertText, "上記の点を修正してください。");
         alert(alertText);
       } else {
         socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"number3":selectnum3.value,"grade":gradeSelect.value,"class":classSelect.value} }));
