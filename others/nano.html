@@ -177,7 +177,7 @@
         if (!name) {
           alertText = addText(alertText, "名前を入力してください。");
         }
-        if (deduplication()) {
+        if (!deduplication()) {
           alertText = addText(alertText, "座席番号はすべて違う席を選択してください。");
         }
         if (gradeSelect.value === "0" || classSelect.value === "0") {
