@@ -98,7 +98,9 @@
         <ul>
           <li><select id="selectnum1"></select><br></li>
           <li><select id="selectnum2"></select><br></li>
-          <li><select id="selectnum3"></select></li>
+          <li><select id="selectnum3"></select><br></li>
+          <li><select id="selectnum4"></select><br></li>
+          <li><select id="selectnum5"></select><br></li>
         <ul>
       </label>
     </div>
@@ -120,27 +122,18 @@
       }
       classSelect.appendChild(opt);
     }
-    const selectnum1 = document.getElementById("selectnum1");
-    for (let i = 1; i <= 42; i++) {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = `${i}番`;
-      selectnum1.appendChild(opt);
+
+    function make_selectdata(t) {
+      for (let i = 1; i <= t; i++) {
+        const select = document.getElementById("selectnum" + i);
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.textContent = `${i}番`;
+        select.appendChild(opt);
+      }
     }
-    const selectnum2 = document.getElementById("selectnum2");
-    for (let i = 1; i <= 42; i++) {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = `${i}番`;
-      selectnum2.appendChild(opt);
-    }
-    const selectnum3 = document.getElementById("selectnum3");
-    for (let i = 1; i <= 42; i++) {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = `${i}番`;
-      selectnum3.appendChild(opt);
-    }
+
+    make_selectdata(5);
 
     let selectedSeat = null;
     const form = document.getElementById("formOverlay");
