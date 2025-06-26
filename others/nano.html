@@ -126,10 +126,10 @@
     function make_selectdata(t) {
       for (let i = 1; i <= t; i++) {
         const select = document.getElementById("selectnum" + i);
-        for (let j = 1; j <= 42; j ++){
+        for (let j = 1; j <= 42; j++){
           const opt = document.createElement("option");
-          opt.value = i;
-          opt.textContent = `${i}番`;
+          opt.value = j;
+          opt.textContent = `${j}番`;
           select.appendChild(opt);
         }
       }
