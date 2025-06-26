@@ -156,15 +156,28 @@
     return text;
     }
 
+    function deduplication() {
+      const values = [];
+      for (let i = 1; i <= 5; i++) {
+        const select = document.getElementById("selectnum" + i);
+        const val = select.value;
+        if (val === "") {
+          return true;
+        }
+        values.push(val);
+      }
+      const uniqueValues = new Set(values);
+      return uniqueValues.size == values.length;
+    }
 
     function submitSeat() {
       const name = nameInput.value.trim();
-      if (!name || selectnum1.value === selectnum2.value || selectnum2.value === selectnum3.value || selectnum1.value === selectnum3.value || gradeSelect.value === "0" || classSelect.value === "0") {
+      if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0") {
         let alertText = "";
         if (!name) {
           alertText = addText(alertText, "名前を入力してください。");
         }
-        if (selectnum1.value === selectnum2.value || selectnum2.value === selectnum3.value || selectnum1.value === selectnum3.value) {
+        if (deduplication()) {
           alertText = addText(alertText, "座席番号はすべて違う席を選択してください。");
         }
         if (gradeSelect.value === "0" || classSelect.value === "0") {
@@ -173,7 +186,7 @@
         alertText = addText(alertText, "\n上記の点を修正してください。");
         alert(alertText);
       } else {
-        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"number3":selectnum3.value,"grade":gradeSelect.value,"class":classSelect.value} }));
+        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"number3":selectnum3.value,"number4":selectnum4.value,"number5":selectnum5,"grade":gradeSelect.value,"class":classSelect.value} }));
         alert("送信されました");
         form.style.display = "none";
       }
