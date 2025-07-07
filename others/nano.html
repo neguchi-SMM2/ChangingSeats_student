@@ -187,7 +187,7 @@
         alertText = addText(alertText, "\n上記の点を修正してください。");
         alert(alertText);
       } else {
-        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":gradeSelect.value,"class":classSelect.value}, message: message }));
+        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":gradeSelect.value,"class":classSelect.value,"message":message} }));
         alert("送信されました");
         form.style.display = "none";
       }
