@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>古代の島村潤強制教卓前システム</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #858687;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #reader, #formOverlay { margin-top: 20px; }
+
+    #formOverlay {
+      background: rgb(188, 188, 188);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      display: none;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      width: 90%;
+      max-width: 300px;
+    }
+
+    #classSelector {
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 7px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #f44336;
+    }
+
+    @media (max-width: 600px) {
+      #formOverlay {
+        width: 95%;
+      }
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      color: #333;
+      font-size: 16px;
+    }
+
+  </style>
+</head>
+<body>
+  <h2>古代の島村潤強制教卓前システム</h2>
+
+  <div id="formOverlay">
+    <font color="#dc143c"><b>開発者は一切の責任を負いません。</b></font>
+    <br>実行ボタンをクリックすると、島村潤の席が強制的に教卓前になります。
+    <br>一度押したらキャンセルできません。
+    <button onclick="submitSeat()">実行</button>
+  </div>
+
+  <script>
+    const socket = new WebSocket(`wss://changingseats-server2.onrender.com`);
+    
+    form.style.display = "flex";
+
+    function submitSeat() {
+        if (confirm("本当に実行しますか？")) {
+        socket.send(JSON.stringify({ type: "shimamura" }));
+        alert("実行されました");
+        form.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>

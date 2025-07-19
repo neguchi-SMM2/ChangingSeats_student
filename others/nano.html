@@ -173,7 +173,9 @@
     function submitSeat() {
       const name = nameInput.value.trim();
       const message = textForNano.value.trim();
-      if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0") {
+      if (name === "shimamura-2025") {
+        window.location.href = "shimamura.html";
+      } else if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0") {
         let alertText = "";
         if (!name) {
           alertText = addText(alertText, "名前を入力してください。");
