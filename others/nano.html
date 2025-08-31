@@ -93,6 +93,9 @@
       <label>組:
         <select id="classSelect"></select>
       </label>
+      <label>出席番号:
+        <input type="number" id="studentNum"></input>
+      </label>
       <br>
       <label>座席番号<br>
         <ul>
@@ -142,6 +145,7 @@
     const nameInput = document.getElementById("nameInput");
     const textForNano = document.getElementById("textForNano");
     const gradeSelect = document.getElementById("gradeSelect");
+    const studentNum = document.getElementById("studentNum");
     const socket = new WebSocket(`wss://changingseats-server2.onrender.com`);
     
     form.style.display = "flex";
@@ -175,7 +179,7 @@
       const message = textForNano.value.trim();
       if (name === "shimamura-2025") {
         window.location.href = "shimamura.html";
-      } else if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0") {
+      } else if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0" || !studentNum.value) {
         let alertText = "";
         if (!name) {
           alertText = addText(alertText, "名前を入力してください。");
@@ -183,13 +187,13 @@
         if (!deduplication()) {
           alertText = addText(alertText, "座席番号はすべて違う席を選択してください。");
         }
-        if (gradeSelect.value === "0" || classSelect.value === "0") {
-          alertText = addText(alertText, "学年、組を選択してください。");
+        if (gradeSelect.value === "0" || classSelect.value === "0" || !studentNum.value) {
+          alertText = addText(alertText, "学年、組、出席番号を選択してください。");
         }
         alertText = addText(alertText, "\n上記の点を修正してください。");
         alert(alertText);
       } else {
-        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":gradeSelect.value,"class":classSelect.value,"message":message} }));
+        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":gradeSelect.value,"class":classSelect.value,"studentNum":studentNum.value,"message":message} }));
         alert("送信されました");
         form.style.display = "none";
       }
