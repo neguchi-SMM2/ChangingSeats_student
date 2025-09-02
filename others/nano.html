@@ -157,7 +157,7 @@
     const studentNum = document.getElementById("studentNum");
     const socket = new WebSocket(`wss://changingseats-server2.onrender.com`);
     
-    ws.addEventListener('error', (error) => {
+    socket.addEventListener('error', (error) => {
       alart(`エラーが発生しました。\nサーバーに接続できていない可能性があります。\nページを再読込してください。\nエラー内容:${error}`);
     });
 
