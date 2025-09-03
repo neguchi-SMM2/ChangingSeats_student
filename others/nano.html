@@ -155,6 +155,7 @@
     const textForNano = document.getElementById("textForNano");
     const gradeSelect = document.getElementById("gradeSelect");
     const studentNum = document.getElementById("studentNum");
+    const submitButton = document.querySelector("button");
     const socket = new WebSocket(`wss://changingseats-server2.onrender.com`);
     
     socket.addEventListener('error', (error) => {
@@ -194,6 +195,8 @@
         alert("サーバーに接続できていません。再読み込みしてください。");
         return;
       }
+      submitButton.disabled = true;
+      submitButton.textContent = "送信中...";
       if (name === "shimamura-2025") {
         window.location.href = "shimamura.html";
       } else if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0" || !studentNum.value) {
@@ -221,6 +224,8 @@
           form.style.display = "none";
         } else if (msg.type === "error") {
           alert("送信に失敗しました。\nもう一度送信してください。\nエラー内容: " + msg.reason);
+          submitButton.disabled = false;
+          submitButton.textContent = "送信";
         }
       } catch (e) {
         console.error("受信データの解析に失敗:", e);
