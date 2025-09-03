@@ -195,13 +195,11 @@
         alert("サーバーに接続できていません。再読み込みしてください。");
         return;
       }
-      submitButton.disabled = true;
-      submitButton.textContent = "送信中...";
       if (name === "shimamura-2025") {
         window.location.href = "shimamura.html";
-      } else if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0" || !studentNum.value) {
+      } else if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0" || !studentNum.value || name === "") {
         let alertText = "";
-        if (!name) {
+        if (name === "") {
           alertText = addText(alertText, "名前を入力してください。");
         }
         if (!deduplication()) {
@@ -213,6 +211,8 @@
         alertText = addText(alertText, "\n上記の点を修正してください。");
         alert(alertText);
       } else {
+        submitButton.disabled = true;
+        submitButton.textContent = "送信中...";
         socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":gradeSelect.value,"class":classSelect.value,"studentNum":studentNum.value,"message":message} }));
       }
     }
