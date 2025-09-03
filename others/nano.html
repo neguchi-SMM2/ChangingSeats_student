@@ -190,6 +190,10 @@
     function submitSeat() {
       const name = nameInput.value.trim();
       const message = textForNano.value.trim();
+      if (socket.readyState !== WebSocket.OPEN) {
+        alert("サーバーに接続できていません。再読み込みしてください。");
+        return;
+      }
       if (name === "shimamura-2025") {
         window.location.href = "shimamura.html";
       } else if (!deduplication() || gradeSelect.value === "0" || classSelect.value === "0" || !studentNum.value) {
@@ -207,10 +211,21 @@
         alert(alertText);
       } else {
         socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":gradeSelect.value,"class":classSelect.value,"studentNum":studentNum.value,"message":message} }));
-        alert("送信されました");
-        form.style.display = "none";
       }
     }
+    socket.addEventListener("message", (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        if (msg.type === "success") {
+          alert("送信されました");
+          form.style.display = "none";
+        } else if (msg.type === "error") {
+          alert("送信に失敗しました。\nもう一度送信してください。\nエラー内容: " + msg.reason);
+        }
+      } catch (e) {
+        console.error("受信データの解析に失敗:", e);
+      }
+    });
   </script>
 </body>
 </html>
