@@ -213,7 +213,7 @@
       } else {
         submitButton.disabled = true;
         submitButton.textContent = "送信中...";
-        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":gradeSelect.value,"class":classSelect.value,"studentNum":studentNum.value,"message":message} }));
+        socket.send(JSON.stringify({ type: "register", data:{"name":name,"number1":selectnum1.value,"number2":selectnum2.value,"grade":2,"class":4,"studentNum":studentNum.value,"message":message} }));
       }
     }
     socket.addEventListener("message", (event) => {
