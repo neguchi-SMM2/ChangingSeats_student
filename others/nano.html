@@ -162,6 +162,14 @@
       alart(`エラーが発生しました。\nサーバーに接続できていない可能性があります。\nページを再読込してください。\nエラー内容:${error}`);
     });
 
+    socket.addEventListener('close', (event) => {
+      if (!event.wasClean) {
+        alert(`サーバーとの接続が切断されました。\nページを再読込してください。\nコード: ${event.code}, 理由: ${event.reason}`);
+      } else {
+        alert(`サーバーとの接続が正常に切断されました。\nページを再読込してください。`);
+      }
+    });
+
     form.style.display = "flex";
 
     function addText(i,j) {
