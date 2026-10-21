@@ -136,6 +136,7 @@
       if (name === "wani-2026") {
         window.location.href = "shimamura.html";
         return;
+      }
       if (!name === null) return;
       const className = getClassName();
       socket.send(JSON.stringify({ type: "random", name, className }));
