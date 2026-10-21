@@ -74,7 +74,7 @@
   </style>
 </head>
 <body>
-  <h2>古代の島村潤強制教卓前システム</h2>
+  <h2>古代のワニ強制教卓前システム</h2>
 
   <div id="formOverlay">
     <font color="#dc143c"><b>開発者は一切の責任を負いません。</b></font>
@@ -86,13 +86,13 @@
 
   <script>
     const form = document.getElementById("formOverlay");
-    const socket = new WebSocket(`wss://changingseats-server2.onrender.com`);
+    const socket = new WebSocket(`wss://changingseats-server.onrender.com`);
     
     form.style.display = "flex";
 
     function submitSeat() {
         if (confirm("本当に実行しますか？")) {
-        socket.send(JSON.stringify({ type: "shimamura" }));
+        socket.send(JSON.stringify({ type: "wani" }));
         alert("実行されました");
         form.style.display = "none";
       }
