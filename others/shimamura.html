@@ -92,7 +92,7 @@
 
     function submitSeat() {
         if (confirm("本当に実行しますか？")) {
-        socket.send(JSON.stringify({ type: "wani" }));
+        socket.send(JSON.stringify({ type: "wani", className: "3-8"}));
         alert("実行されました");
         form.style.display = "none";
       }
