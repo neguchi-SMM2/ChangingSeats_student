@@ -88,6 +88,10 @@
       <label>組:
         <select id="classSelect"></select>
       </label>
+      <br>
+      <label>出席番号:
+        <select id="numSelect"></select>
+      </label>
     </div>
 
     <p>名前は<u>漢字フルネーム</u>で入力。<br><u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u><br>改行文字を入れないでください。<br>送信が完了したらページを閉じてください。</p>
@@ -105,6 +109,14 @@
       opt.value = i;
       opt.textContent = `${i}組`;
       classSelect.appendChild(opt);
+    }
+
+    const numSelect = document.getElementById("numSelect");
+    for (let i = 1; i <= 40; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = i;
+      numSelect.appendChild(opt);
     }
 
     let selectedSeat = null;
@@ -133,13 +145,14 @@
 
     function submitSeat() {
       const name = nameInput.value.trim();
+      const num = numSelect.value;
       if (name === "wani-2026") {
         window.location.href = "shimamura.html";
         return;
       }
-      if (!name === null) return;
+      if (!name || !gradeSelect.value || !classSelect.value　|| !num) return;
       const className = getClassName();
-      socket.send(JSON.stringify({ type: "random", name, className }));
+      socket.send(JSON.stringify({ type: "random", name, className, num }));
       alert("送信されました");
       form.style.display = "none";
     }
