@@ -144,7 +144,7 @@
     function submitSeat() {
       const name = nameInput.value.trim();
       const num = numSelect.value;
-      if (!name || !gradeSelect.value || !classSelect.value || num === 0) return;
+      if (!name || !gradeSelect.value || !classSelect.value || num == 0) return;
       const className = getClassName();
       socket.send(JSON.stringify({ type: "random_front", name, className, num }));
       alert("送信されました");
