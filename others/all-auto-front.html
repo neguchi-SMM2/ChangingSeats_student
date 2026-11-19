@@ -49,7 +49,7 @@
     }
 
     button.secondary {
-      background: #f44336;
+      background: #f443336;
     }
 
     @media (max-width: 600px) {
@@ -88,9 +88,13 @@
       <label>組:
         <select id="classSelect"></select>
       </label>
+      <br>
+      <label>出席番号:
+        <select id="numSelect"></select>
+      </label>
     </div>
 
-    <p>名前は<u>漢字フルネーム</u>で入力。<br><u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u><br>改行文字を入れないでください。<br>送信が完了したらページを閉じてください。</p>
+    <p>名前は<u>漢字フルネーム</u>で入力。<br><u><font color="#dc143c"><b>苗字と名前の間に空白を入れないでください。</b></font></u><br>改行文字を入れないでください。</p>
     <input type="text" id="nameInput" placeholder="名前を入力" />
     <button onclick="submitSeat()">送信</button>
   </div>
@@ -105,13 +109,21 @@
       classSelect.appendChild(opt);
     }
 
+    const numSelect = document.getElementById("numSelect");
+    for (let i = 1; i <= 40; i++) {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = i;
+      numSelect.appendChild(opt);
+    }
+
     let selectedSeat = null;
     const form = document.getElementById("formOverlay");
     const seatDisplay = document.getElementById("seatDisplay");
     const nameInput = document.getElementById("nameInput");
     const gradeSelect = document.getElementById("gradeSelect");
     const socket = new WebSocket(`wss://changingseats-server.onrender.com`);
-    
+
     form.style.display = "flex";
 
     function getClassName() {
@@ -131,9 +143,10 @@
 
     function submitSeat() {
       const name = nameInput.value.trim();
-      if (!name === null) return;
+      const num = numSelect.value;
+      if (!name || !gradeSelect.value || !classSelect.value || !num) return;
       const className = getClassName();
-      socket.send(JSON.stringify({ type: "random_front", name, className }));
+      socket.send(JSON.stringify({ type: "random_front", name, className, num }));
       alert("送信されました");
       form.style.display = "none";
     }
